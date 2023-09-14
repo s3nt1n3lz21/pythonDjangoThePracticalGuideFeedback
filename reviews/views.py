@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.views import View
 from django.views.generic.base import TemplateView
+from django.views.generic import ListView
 
 from .forms import ReviewForm
 from .models import Review
@@ -54,15 +55,16 @@ class ThankYouView(TemplateView):
 # def thank_you(request):
 #     return render(request, "reviews/thank_you.html")
 
-class ReviewsListView(TemplateView):
+class ReviewsListView(ListView):
     template_name = "reviews/review_list.html"
+    model = Review
+    context_object_name = "reviews"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        reviews = Review.objects.all()
-        context["reviews"] = reviews
-        return context
-    
+    # def get_queryset(self):
+    #     base_query = super().get_queryset()
+    #     data = base_query.filter(rating__gt=4)
+    #     return data
+
 class ReviewDetailView(TemplateView):
     template_name = "reviews/review_detail.html"
 
